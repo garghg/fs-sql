@@ -1,0 +1,3 @@
+CREATE TABLE blogs ( id SERIAL PRIMARY KEY, author text, url text NOT NULL, title text NOT NULL, likes INTEGER DEFAULT 0 );
+INSERT INTO blogs (author, url, title, likes) VALUES ('Dan Abramov', 'https://overreacted.io/a-complete-guide-to-useeffect/', 'A Complete Guide to useEffect', 12);
+INSERT INTO blogs (author, url, title, likes) VALUES ('Martin Fowler', 'https://martinfowler.com/articles/microservices.html', 'Microservices', 5);
