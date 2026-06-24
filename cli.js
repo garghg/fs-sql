@@ -34,17 +34,33 @@ Blog.init({
     modelName: 'blog'
 })
 
-const main  = async () => {
-    try {
-        await sequelize.authenticate()
-        const blogs = await sequelize.query("SELECT *  FROM blogs", { type: QueryTypes.SELECT })
-        blogs.map(blog => {
-            console.log(`${blog.author}: ${blog.title}, ${blog.likes} likes` )
-        })
-        sequelize.close()
-    } catch (error) {
-        console.log(error)
-    }
-}
+app.use(express.json())
 
-main()
+app.get('/api/blogs', async (req, res) => {
+    const blogs = await Blog.findAll()
+    res.json(blogs)
+})
+
+app.post('/api/blogs', async (req, res) => {
+    try {
+        const blog = await Blog.create(req.body)
+        return res.json(blog)
+    } catch (error) {
+        res.status(404).json({ error })
+    }
+})
+
+app.delete('/api/blogs/:id', async (req, res) => {
+    try {
+        const blog = await Blog.findByPk(req.params.id)
+        await blog.destroy()
+        res.json(blog)
+    } catch (error) {
+        res.status(404).json({ error })
+    }
+})
+
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => {
+    console.log("connected")
+})
