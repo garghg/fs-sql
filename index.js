@@ -7,8 +7,19 @@ const authorRouter = require('./controllers/authors')
 const { PORT } = require('./utils/config')
 const { connectToDB } = require('./utils/db')
 const { errorHandler } = require('./controllers/middleware')
+const { Blog, User } = require('./models')
 
 const app = express()
+
+app.get('/', (req, res) => {
+  return res.status(200).end()
+})
+
+app.post('/api/reset', async (req, res) => {
+  await Blog.destroy({ where: {} })
+  await User.destroy({ where: {} })
+  res.status(204).end()
+})
 
 app.use(express.json())
 app.use('/api/blogs', blogRouter)
