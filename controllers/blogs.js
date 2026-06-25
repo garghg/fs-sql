@@ -26,9 +26,16 @@ router.post('/', tokenExtractor, async (req, res, next) => {
     }
 })
 
-router.delete('/:id', blogFinder, async (req, res) => {
-  await req.note.destroy()
-  res.status(204).end()
+router.delete('/:id', tokenExtractor, blogFinder, async (req, res, next) => {
+    const user = await User.findByPk(req.decodedToken.id)
+    if (req.blog.userId === user.id) {
+        await req.blog.destroy()
+        return res.status(204).end()
+    } else {
+        const err = new Error("User Not Found")
+        err.status = 400
+        return next(err)
+    }
 })
 
 router.put('/:id', blogFinder, async (req, res) => {
