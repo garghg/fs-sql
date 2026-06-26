@@ -9,7 +9,7 @@ const readingListRouter = require('./controllers/readingLists')
 const { PORT } = require('./utils/config')
 const { connectToDB } = require('./utils/db')
 const { errorHandler } = require('./controllers/middleware')
-const { Blog, User } = require('./models')
+const { Blog, User, Session, ReadingList } = require('./models')
 
 const app = express()
 
@@ -18,6 +18,8 @@ app.get('/', (req, res) => {
 })
 
 app.post('/api/reset', async (req, res) => {
+  await Session.destroy({ where: {} })
+  await ReadingList.destroy({ where: {} })
   await Blog.destroy({ where: {} })
   await User.destroy({ where: {} })
   res.status(204).end()
