@@ -3,6 +3,7 @@ const router = require("express").Router()
 const { Op } = require('sequelize')
 const { Blog, User } = require('../models')
 const { blogFinder, tokenExtractor } = require("./middleware")
+const { createError } = require("../utils/utils")
 
 router.get('/', async (req, res) => {
     const where = {}
@@ -44,9 +45,7 @@ router.delete('/:id', tokenExtractor, blogFinder, async (req, res, next) => {
         await req.blog.destroy()
         return res.status(204).end()
     } else {
-        const err = new Error("User Not Found")
-        err.status = 400
-        return next(err)
+        next(createError("User Not Found", 400))
     }
 })
 

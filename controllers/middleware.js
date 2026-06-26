@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken")
 const { SECRET } = require("../utils/config")
 const { Blog } = require("../models")
+const { createError } = require("../utils/utils")
 
 const blogFinder = async (req, res, next) => {
     req.blog = await Blog.findByPk(req.params.id)
@@ -16,14 +17,10 @@ const tokenExtractor = async (req, res, next) => {
         try {
             req.decodedToken = jwt.verify(authorization.substring(7), SECRET)
         } catch {
-            const err = new Error('Token Invalid')
-            err.status = 401
-            return next(err)
+            return next(createError('Token Invalid', 401))
         }
     } else {
-        const err = new Error('Not Logged In')
-        err.status = 401
-        return next(err)
+        return next(createError('Not Logged In', 401))
     }
     next()
 }
