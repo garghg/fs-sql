@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "node index.js",
+    "start": "node --watch index.js",
     "test": "TESTING=true node --test --test-concurrency=1 tests/api_ch3.test.js",
     "start:test": "TESTING=true node index.js"
   },
